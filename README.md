@@ -6,10 +6,10 @@ This dictionary has a much quicker `TryGetValue` method than the regular diction
 ```plaintext
 |                 Method |     Mean |     Error |    StdDev |
 |----------------------- |---------:|----------:|----------:|
-|     HighPerfDictionary | 5.538 ns | 0.0936 ns | 0.0876 ns |
-| DotNetFrozenDictionary | 9.152 ns | 0.1548 ns | 0.1372 ns |
-|       DotNetDictionary | 8.456 ns | 0.0719 ns | 0.0637 ns |
+|     HighPerfDictionary | 5.634 ns | 0.1554 ns | 0.1453 ns |
+| DotNetFrozenDictionary | 8.843 ns | 0.1126 ns | 0.1054 ns |
+|       DotNetDictionary | 8.529 ns | 0.0751 ns | 0.0702 ns |
 ```
 This dictionary uses `string` as `Key`. However, we can also build a `HighPerfDictionary<TKey, TValue>` but we can't use `GetHashCode()` then. We would need our own `GethashCode(int mutator)` method, maybe specified by an `Interface`.
 # Changes
-* 2023.03.23: The project now uses .NET 8 (preview-2 as of the time of writing this README.md) to check if the `FrozenDictionary<string, string>` of .NET gives any better performance. LOL.
+* 2023.03.23: The project now uses .NET 8 (preview-2 as of the time of writing this `README.md`) to check if the `FrozenDictionary<string, string>` (with `optimizeForReading: true` set) of .NET gives any better performance. LOL.

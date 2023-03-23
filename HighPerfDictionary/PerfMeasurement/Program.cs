@@ -34,7 +34,7 @@ namespace PerfMeasurement
             for (int count = 0; count < 1024; count++)
                 dict.Add($"I{count:X03}", count.ToString());
 
-            yield return new object[] { dict.ToFrozenDictionary<string, string>(), $"I{666:X03}" };
+            yield return new object[] { dict.ToFrozenDictionary(optimizeForReading: true), $"I{666:X03}" };
         }
 
         public IEnumerable<object[]> GiveHighPerfDictionary()
