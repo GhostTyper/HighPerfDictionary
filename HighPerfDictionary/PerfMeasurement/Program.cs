@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using HighPerfDictionary;
+using System.Collections.Frozen;
 
 namespace PerfMeasurement
 {
@@ -26,6 +27,16 @@ namespace PerfMeasurement
             yield return new object[] { dict, $"I{666:X03}" };
         }
 
+        public IEnumerable<object[]> GiveFrozenDictionary()
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+
+            for (int count = 0; count < 1024; count++)
+                dict.Add($"I{count:X03}", count.ToString());
+
+            yield return new object[] { dict.ToFrozenDictionary<string, string>(), $"I{666:X03}" };
+        }
+
         public IEnumerable<object[]> GiveHighPerfDictionary()
         {
             KeyValuePair<string, string>[] kvps = new KeyValuePair<string, string>[1024];
@@ -39,6 +50,18 @@ namespace PerfMeasurement
         [Benchmark]
         [ArgumentsSource(nameof(GiveDictionary))]
         public string DotNetDictionary(Dictionary<string, string> dict, string search)
+        {
+            string? str;
+
+            if (dict.TryGetValue(search, out str))
+                return str;
+
+            throw new InvalidOperationException("String not found.");
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(GiveFrozenDictionary))]
+        public string DotNetFrozenDictionary(FrozenDictionary<string, string> dict, string search)
         {
             string? str;
 
